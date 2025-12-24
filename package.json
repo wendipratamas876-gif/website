@@ -2,7 +2,6 @@
   "name": "kelvinvmxz-botnet",
   "version": "1.0.0",
   "description": "KelvinVMXZ Botnet Web Control Panel",
-  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js"
