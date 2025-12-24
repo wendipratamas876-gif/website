@@ -1,1 +1,89 @@
-
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - KelvinVMXZ Botnet</title>
+    <link rel="stylesheet" href="style/panel.css">
+    <link rel="stylesheet" href="style/style.css">
+</head>
+<body class="gradient-bg">
+    <div class="sidebar">
+        <div class="logo">KelvinVMXZ</div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active">Dashboard</a></li>
+                <li><a href="#">Attack Hub</a></li>
+                <li><a href="#">VPS Management</a></li>
+                <li><a href="#">Users</a></li>
+                <li><a href="#">Attack History</a></li>
+                <li><a href="#">Check Host</a></li>
+            </ul>
+        </nav>
+    </div>
+    
+    <div class="main-content">
+        <header>
+            <div class="header-content">
+                <h1>Dashboard</h1>
+                <div class="user-info">
+                    <span>Welcome, Admin</span>
+                    <button class="logout-btn">Logout</button>
+                </div>
+            </div>
+        </header>
+        
+        <div class="dashboard-grid">
+            <div class="card">
+                <div class="card-header">
+                    <h3>CNC Status</h3>
+                    <span class="status active">🟢 ACTIVE</span>
+                </div>
+                <div class="card-content">
+                    <p>3 VPS Nodes Online</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Ongoing Attacks</h3>
+                    <span class="status">⚡ 2</span>
+                </div>
+                <div class="card-content">
+                    <p>Active attacks running</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Total Methods</h3>
+                    <span class="status">🔥 20</span>
+                </div>
+                <div class="card-content">
+                    <p>Attack methods available</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>VPS Nodes</h3>
+                    <span class="status">🌐 3</span>
+                </div>
+                <div class="card-content">
+                    <p>Connected VPS servers</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn primary">Launch Attack</button>
+            <button class="btn success">Start CNC</button>
+            <button class="btn danger">Stop CNC</button>
+            <button class="btn info">Add VPS</button>
+        </div>
+    </div>
+    
+    <script src="js/main.js"></script>
+    <script src="js/attack.js"></script>
+</body>
+</html>
