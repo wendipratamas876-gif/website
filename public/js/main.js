@@ -1,9 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginForm = document.querySelector('.login-form');
+    const logoutBtn = document.querySelector('.logout-btn');
     
-    if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+    // Login functionality
+    if (loginBtn) {
+        loginBtn.addEventListener('click', function() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
@@ -17,19 +19,30 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = '/dashboard';
+                    window.location.href = '/dashboard.html';
                 } else {
-                    alert('Invalid credentials');
+                    showNotification('Invalid credentials', 'error');
                 }
             });
         });
     }
     
     // Logout functionality
-    const logoutBtn = document.querySelector('.logout-btn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', function() {
             window.location.href = '/';
         });
+    }
+    
+    // Show notification
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
     }
 });
